@@ -68,14 +68,14 @@ ALGnew(PyObject *self, PyObject *args, PyObject *kwdict)
 {
 	unsigned char *key, *IV;
 	ALGobject * new=NULL;
-	int keylen, IVlen=0, mode=MODE_ECB, segment_size=0;
+	Py_ssize_t keylen, IVlen=0, mode=MODE_ECB, segment_size=0;
 	PyObject *counter = NULL;
 	int counter_shortcut = 0;
 #ifdef PCT_ARC2_MODULE
         int effective_keylen = 1024;    /* this is a weird default, but it's compatible with old versions of PyCrypto */
 #endif
 	/* Set default values */
-	if (!PyArg_ParseTupleAndKeywords(args, kwdict, "s#|is#Oi"
+	if (!PyArg_ParseTupleAndKeywords(args, kwdict, "s#|ns#Oi"
 #ifdef PCT_ARC2_MODULE
 					 "i"
 #endif
@@ -198,7 +198,7 @@ ALG_Encrypt(ALGobject *self, PyObject *args)
 {
 	unsigned char *buffer, *str;
 	unsigned char temp[BLOCK_SIZE];
-	int i, j, len;
+	Py_ssize_t i, j, len;
 	PyObject *result;
 
 #if PY_MAJOR_VERSION >= 3
@@ -457,7 +457,7 @@ ALG_Decrypt(ALGobject *self, PyObject *args)
 {
 	unsigned char *buffer, *str;
 	unsigned char temp[BLOCK_SIZE];
-	int i, j, len;
+	Py_ssize_t i, j, len;
 	PyObject *result;
 
 	if(self->prf_mode) {
@@ -703,7 +703,7 @@ PyMethodDef ALGmethods[] =
 PyMemberDef ALGmembers[] =
 {
 	{"IV", T_STRING_INPLACE, offsetof(ALGobject, IV), READONLY, "the initialization vector"},
-	{"mode", T_INT, offsetof(ALGobject, mode), READONLY, "the mode of operation"},
+	{"mode", T_PYSSIZET, offsetof(ALGobject, mode), READONLY, "the mode of operation"},
 	{NULL},
 };
 

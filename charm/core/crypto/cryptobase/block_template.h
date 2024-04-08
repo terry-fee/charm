@@ -46,7 +46,7 @@
 typedef struct
 {
 	PyObject_HEAD
-	int mode, count, segment_size, prf_mode;
+	Py_ssize_t mode, count, segment_size, prf_mode;
 	unsigned char IV[BLOCK_SIZE], oldCipher[BLOCK_SIZE];
 	PyObject *counter;
 	int counter_shortcut;
