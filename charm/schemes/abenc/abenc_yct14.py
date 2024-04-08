@@ -19,7 +19,7 @@ from charm.toolbox.ABEnc import ABEnc
 from charm.schemes.abenc.abenc_lsw08 import KPabe
 from charm.core.math.pairing import hashPair as extractor
 
-from time import clock
+from time import time
 
 debug = False
 class EKPabe(ABEnc):
@@ -152,38 +152,38 @@ def benchmark():
     msg2 = groupObj2.random(GT)
 
     for b in range(4):
-        start = clock()
+        start = time()
         (epk, emk) = ekpabe.setup(attributes)
-        t1_s += clock() - start
+        t1_s += time() - start
         
-        start = clock()
+        start = time()
         (pk, mk) = kpabe.setup()
-        t2_s += clock() - start
+        t2_s += time() - start
 
-        start = clock()
+        start = time()
         emykey = ekpabe.keygen(epk, emk, policy)
-        t1_k += clock() - start
+        t1_k += time() - start
         
-        start = clock()
+        start = time()
         mykey = kpabe.keygen(pk, mk, policy)
-        t2_k += clock() - start
+        t2_k += time() - start
         
         for i in range(50):
-            start = clock()
+            start = time()
             eciphertext = ekpabe.encrypt(epk, msg1, attributes)
-            t1_e += clock() - start
+            t1_e += time() - start
             
-            start = clock()
+            start = time()
             ciphertext = kpabe.encrypt(pk, msg2, attributes)
-            t2_e += clock() - start
+            t2_e += time() - start
             
-            start = clock()
+            start = time()
             erec_msg = ekpabe.decrypt(eciphertext, emykey)
-            t1_d += clock() - start
+            t1_d += time() - start
             
-            start = clock()
+            start = time()
             rec_msg = kpabe.decrypt(ciphertext, mykey)
-            t2_d += clock() - start
+            t2_d += time() - start
 
             assert msg1 == erec_msg
             assert msg2 == rec_msg
