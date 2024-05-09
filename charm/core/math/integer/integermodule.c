@@ -29,6 +29,12 @@
 
 #include "integermodule.h"
 
+#if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 11
+#define py_size(x, y) Py_SET_SIZE(x, y)
+#else
+#define py_size(x, y) (Py_SIZE(x) = y)
+#endif
+
 struct module_state {
 	PyObject *error;
 #ifdef BENCHMARK_ENABLED
@@ -169,10 +175,10 @@ PyObject *mpzToLongObj(mpz_t m) {
 	while ((i > 0) && (l->ob_digit[i - 1] == 0))
 		i--;
 	if(isNeg) {
-		Py_SIZE(l) = -i;
+		py_size(l, -i);
 	}
 	else {
-		Py_SIZE(l) = i;
+		py_size(l, i);
 	}
 	mpz_clear(temp);
 	return (PyObject *) l;
